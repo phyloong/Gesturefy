@@ -239,6 +239,127 @@
     "description": "No search results found"
   },
 
+  "gestureSetDefaultName": {
+    "message": "Default",
+    "description": "Default"
+  },
+  "gestureSetDefaultDescription": {
+    "message": "The gestures that ship with Gesturefy.",
+    "description": "The gestures that ship with Gesturefy."
+  },
+  "gestureSetEdgeName": {
+    "message": "Edge",
+    "description": "Edge"
+  },
+  "gestureSetEdgeDescription": {
+    "message": "Microsoft Edge's mouse gestures, some of which require additional permissions.",
+    "description": "Microsoft Edge's mouse gestures, some of which require additional permissions."
+  },
+  "gestureSetBarLabel": {
+    "message": "Gesture set:",
+    "description": "Gesture set:"
+  },
+  "gestureSetNone": {
+    "message": "None",
+    "description": "None"
+  },
+  "gestureSetSelectButton": {
+    "message": "Choose set",
+    "description": "Choose set"
+  },
+  "gestureSetSaveButton": {
+    "message": "Save as…",
+    "description": "Save as…"
+  },
+  "gestureSetBuiltinTag": {
+    "message": "Built-in",
+    "description": "Built-in"
+  },
+  "gestureSetApplied": {
+    "message": "Applied",
+    "description": "Applied"
+  },
+  "gestureSetStaged": {
+    "message": "Preview",
+    "description": "Preview"
+  },
+  "gestureSetPanelTitle": {
+    "message": "Choose a gesture set",
+    "description": "Choose a gesture set"
+  },
+  "gestureSetApplyButton": {
+    "message": "Apply",
+    "description": "Apply"
+  },
+  "gestureSetCancelButton": {
+    "message": "Cancel",
+    "description": "Cancel"
+  },
+  "gestureSetReplaceHint": {
+    "message": "Applying replaces your current $COUNT$ gestures.",
+    "description": "Applying replaces your current $COUNT$ gestures.",
+    "placeholders": {
+      "count" : {
+        "content" : "$1",
+        "example" : "12"
+      }
+    }
+  },
+  "gestureSetSaveTitle": {
+    "message": "Save gesture set",
+    "description": "Save gesture set"
+  },
+  "gestureSetSaveDescription": {
+    "message": "Enter a name for the current gesture set.",
+    "description": "Enter a name for the current gesture set."
+  },
+  "gestureSetSaveInvalidEmpty": {
+    "message": "Please enter a name.",
+    "description": "Please enter a name."
+  },
+  "gestureSetSaveInvalidBuiltin": {
+    "message": "This name is reserved for a built-in set.",
+    "description": "This name is reserved for a built-in set."
+  },
+  "gestureSetSaveInvalidDuplicate": {
+    "message": "A set with this name already exists.",
+    "description": "A set with this name already exists."
+  },
+  "gestureSetDeleteTitle": {
+    "message": "Delete gesture set",
+    "description": "Delete gesture set"
+  },
+  "gestureSetDeleteConfirm": {
+    "message": "Delete the set \"$NAME$\"? Your current gestures will not change.",
+    "description": "Delete the set \"$NAME$\"? Your current gestures will not change.",
+    "placeholders": {
+      "name" : {
+        "content" : "$1",
+        "example" : "Mine"
+      }
+    }
+  },
+  "gestureSetDeleteButton": {
+    "message": "Delete set",
+    "description": "Delete set"
+  },
+  "gestureSetLeaveTitle": {
+    "message": "Discard selection?",
+    "description": "Discard selection?"
+  },
+  "gestureSetLeaveConfirm": {
+    "message": "The selected set has not been applied. Leave without applying?",
+    "description": "The selected set has not been applied. Leave without applying?"
+  },
+  "gestureSetDanglingTitle": {
+    "message": "Gesture set not found",
+    "description": "Gesture set not found"
+  },
+  "gestureSetDanglingMessage": {
+    "message": "The last applied gesture set no longer exists. Your gestures were left unchanged.",
+    "description": "The last applied gesture set no longer exists. Your gestures were left unchanged."
+  },
+
   "extraLabelRockerActive": {
     "message": "Rocker gesture",
     "description": "Rocker gesture"

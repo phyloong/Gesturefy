@@ -1,0 +1,171 @@
+[
+  {
+    "id": "builtin:edge",
+    "nameKey": "gestureSetEdgeName",
+    "descriptionKey": "gestureSetEdgeDescription",
+    "gestures": [
+      {
+        "pattern": [[-1, 0]],
+        "command": {
+          "name": "PageBack"
+        }
+      },
+      {
+        "pattern": [[1, 0]],
+        "command": {
+          "name": "PageForth"
+        }
+      },
+      {
+        "pattern": [[0, -1]],
+        "command": {
+          "name": "ScrollPageUp",
+          "settings": {
+            "duration": 100,
+            "scrollProportion": 95
+          }
+        }
+      },
+      {
+        "pattern": [[0, 1]],
+        "command": {
+          "name": "ScrollPageDown",
+          "settings": {
+            "duration": 100,
+            "scrollProportion": 95
+          }
+        }
+      },
+      {
+        "pattern": [[0, 1], [1, 0]],
+        "command": {
+          "name": "CloseTab",
+          "settings": {
+            "nextFocus": "default",
+            "closePinned": true
+          }
+        }
+      },
+      {
+        "pattern": [[-1, 0], [0, -1]],
+        "command": {
+          "name": "RestoreTab",
+          "settings": {
+            "currentWindowOnly": false
+          }
+        }
+      },
+      {
+        "pattern": [[1, 0], [0, -1]],
+        "command": {
+          "name": "NewTab",
+          "settings": {
+            "position": "default",
+            "focus": true
+          }
+        }
+      },
+      {
+        "pattern": [[1, 0], [0, 1]],
+        "command": {
+          "name": "ReloadTab",
+          "settings": {
+            "cache": false
+          }
+        }
+      },
+      {
+        "pattern": [[0, -1], [-1, 0]],
+        "command": {
+          "name": "FocusLeftTab",
+          "settings": {
+            "cycling": true,
+            "excludeDiscarded": false
+          }
+        }
+      },
+      {
+        "pattern": [[0, -1], [1, 0]],
+        "command": {
+          "name": "FocusRightTab",
+          "settings": {
+            "cycling": true,
+            "excludeDiscarded": false
+          }
+        }
+      },
+      {
+        "pattern": [[0, 1], [-1, 0]],
+        "command": {
+          "name": "StopLoading"
+        }
+      },
+      {
+        "pattern": [[-1, 0], [0, 1]],
+        "command": {
+          "name": "CloseOtherTabs"
+        }
+      },
+      {
+        "pattern": [[0, -1], [0, 1]],
+        "command": {
+          "name": "ScrollBottom",
+          "settings": {
+            "duration": 100
+          }
+        }
+      },
+      {
+        "pattern": [[0, 1], [0, -1]],
+        "command": {
+          "name": "ScrollTop",
+          "settings": {
+            "duration": 100
+          }
+        }
+      },
+      {
+        "pattern": [[-1, 0], [1, 0]],
+        "command": {
+          "name": "CloseTab",
+          "settings": {
+            "nextFocus": "default",
+            "closePinned": true
+          }
+        }
+      },
+      {
+        "pattern": [[1, 0], [-1, 0]],
+        "command": {
+          "name": "RestoreTab",
+          "settings": {
+            "currentWindowOnly": false
+          }
+        }
+      },
+      {
+        "pattern": [
+          [-37, -25],
+          [-88, -11],
+          [-50, 17],
+          [-63, 62],
+          [-22, 68],
+          [4, 50],
+          [33, 49],
+          [84, 43],
+          [105, -4],
+          [46, -24],
+          [22, -27],
+          [8, -23],
+          [-4, -44],
+          [-16, -17],
+          [-56, -17],
+          [-77, 8]
+        ],
+        "command": {
+          "name": "OpenAddonSettings"
+        }
+      }
+    ]
+  }
+]

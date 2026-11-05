@@ -28,6 +28,8 @@
   --shadowSecond-color:rgba(0,0,0,0.15);
   --highlighted-color: #00AAA0;
   --warning-color: #FF6347;
+  --notice-color: #7A5A00;
+  --noticeBackground-color: #FFF3C4;
 }
 
 /* Dark Theme */
@@ -46,6 +48,8 @@
   --shadowSecond-color: rgba(200,200,200, 0.15);
   --highlighted-color: #00AAA0;
   --warning-color: #FF6347;
+  --notice-color: #FACC15;
+  --noticeBackground-color: rgba(250, 204, 21, 0.12);
 }
 
 /* High Contrast Theme */
@@ -64,6 +68,8 @@
   --shadowSecond-color: rgba(255,255,255,0.15);
   --highlighted-color: #00ff00;
   --warning-color: #FF0000;
+  --notice-color: #FFFF00;
+  --noticeBackground-color: transparent;
 }
 
 .theme-transition:root * {
@@ -335,6 +341,34 @@ h2 {
 
 #Gestures.content {
   max-width: none;
+}
+
+/*
+  stretch the gestures tab to the full viewport height
+  so the gesture set bar can be anchored to the bottom edge
+*/
+#Gestures.content:target {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding-bottom: 0;
+}
+
+/*
+  the gesture editor popup renders fixed positioned overlays inside its shadow dom
+  as a flex item it would be blockified and contain those overlays
+*/
+#Gestures > #gesturePopup {
+  contain: none;
+}
+
+/*
+  the body level popups are flex items of the body as well
+  without this they would be blockified, lose their width and clip the overlays
+*/
+body > popup-box {
+  contain: none;
 }
 
 .content-header {
@@ -1239,4 +1273,298 @@ label.button > span {
     opacity: 0;
     transform: scale(.9);
   }
+}
+
+/**
+ * Gesture set layout
+ **/
+
+.gs-dock {
+  /*
+    stays visible at the bottom edge while the gesture list is scrolled
+    and is the anchor for the upward opening gesture set menu
+  */
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  /* push the bar to the bottom edge of the content area for short gesture lists */
+  margin: auto -30px 0 -30px;
+  background-color: var(--base-color);
+}
+
+.gs-select {
+  position: relative;
+}
+
+.gs-trigger {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  min-width: 150px;
+  max-width: 260px;
+  padding: 7px 12px 5px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: var(--base-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: border-color .3s, box-shadow .3s;
+}
+
+.gs-trigger:hover,
+.gs-trigger:focus {
+  border-color: var(--highlighted-color);
+  box-shadow: 0 0 10px -4px var(--shadow-color);
+}
+
+.gs-trigger::after {
+  margin-left: auto;
+  border-top: 5px solid currentColor;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  opacity: .5;
+  content: "";
+  transition: transform .3s;
+}
+
+.gs-trigger[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.gs-trigger-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gs-panel {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  max-width: calc(100vw - 60px);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: var(--base-color);
+  box-shadow: 0 0 10px -4px var(--shadow-color);
+  z-index: 1;
+}
+
+.gs-panel[hidden] {
+  display: none;
+}
+
+.gs-panel-head {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--borderSecond-color);
+}
+
+.gs-panel-title {
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.gs-panel-close {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-color);
+  text-align: center;
+  font-size: 10px;
+  transition: color .3s;
+  cursor: pointer;
+}
+
+.gs-panel-close:hover,
+.gs-panel-close:focus {
+  color: var(--warning-color);
+}
+
+.gs-list {
+  max-height: 45vh;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.gs-item {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--borderSecond-color);
+  cursor: pointer;
+  transition: background-color .3s, box-shadow .3s;
+}
+
+.gs-item:last-child {
+  border-bottom: none;
+}
+
+.gs-item:hover {
+  background-color: var(--baseSecond-color);
+  box-shadow: 0 0 10px -4px var(--shadow-color);
+}
+
+/* the doubled class keeps the marker above the hover state */
+.gs-item.gs-item-preview {
+  background-color: var(--baseSecond-color);
+  box-shadow: inset 3px 0 0 var(--highlighted-color);
+}
+
+.gs-item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.gs-item-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 4px;
+}
+
+.gs-item-name {
+  font-size: 16px;
+}
+
+.gs-item-tag {
+  padding: 1px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  opacity: .5;
+  font-size: 12px;
+}
+
+.gs-item-description {
+  margin-top: 4px;
+  opacity: .5;
+  font-size: 14px;
+  transition: opacity .3s;
+}
+
+.gs-item:hover .gs-item-description {
+  opacity: 1;
+}
+
+.gs-item-applied {
+  color: var(--highlighted-color);
+  font-size: 14px;
+}
+
+.gs-item-applied::before {
+  margin-right: 4px;
+  content: "\2713";
+}
+
+.gs-item-preview-tag {
+  opacity: .5;
+  font-size: 14px;
+}
+
+.gs-item-delete {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--warning-color);
+  text-align: center;
+  font-size: 9px;
+  line-height: 9px;
+  cursor: pointer;
+  transition: background-color .3s, color .3s, opacity .3s;
+}
+
+.gs-item:hover .gs-item-delete,
+.gs-item:focus-within .gs-item-delete {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gs-item-delete:hover,
+.gs-item-delete:focus {
+  background-color: var(--warning-color);
+  color: var(--base-color);
+}
+
+.gs-hint {
+  margin: 8px 12px 8px 12px;
+  padding: 6px 10px;
+  border-radius: 2px;
+  background-color: var(--noticeBackground-color);
+  color: var(--notice-color);
+  font-size: 14px;
+}
+
+.gs-hint:empty {
+  display: none;
+}
+
+.gs-panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--borderSecond-color);
+}
+
+.gs-button {
+  padding: 7px 14px 5px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: var(--base-color);
+  color: var(--text-color);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .3s, box-shadow .3s, color .3s;
+}
+
+.gs-button:hover,
+.gs-button:focus {
+  border-color: var(--highlighted-color);
+  box-shadow: 0 0 10px -4px var(--shadow-color);
+}
+
+.gs-button-primary {
+  border-color: var(--highlighted-color);
+  background-color: var(--highlighted-color);
+  color: var(--textSecond-color);
+}
+
+.gs-button[disabled] {
+  opacity: .5;
+  border-color: var(--border-color);
+  box-shadow: none;
+  background-color: var(--base-color);
+  color: var(--text-color);
+  cursor: default;
+}
+
+.gs-bar {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding: 10px 30px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--base-color);
+}
+
+.gs-bar-label {
+  opacity: .5;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.gs-save-button {
+  margin-left: auto;
 }

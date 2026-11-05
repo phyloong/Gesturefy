@@ -69,5 +69,29 @@
     <div class="content" data-include="/views/options/fragments/exclusions.inc" id="Exclusions"></div>
     <div class="content" data-include="/views/options/fragments/about.inc" id="About"></div>
   </div>
+
+  <!--
+    the gesture set popups live outside the tab content
+    so they can render while a different tab is targeted
+  -->
+  <popup-box id="gestureSetSavePopup" type="prompt">
+    <span slot="title" data-i18n="gestureSetSaveTitle"></span>
+    <p id="gestureSetSaveMessage" slot="content" data-i18n="gestureSetSaveDescription"></p>
+  </popup-box>
+
+  <popup-box id="gestureSetDeletePopup" type="confirm">
+    <span slot="title" data-i18n="gestureSetDeleteTitle"></span>
+    <p id="gestureSetDeleteMessage" slot="content"></p>
+  </popup-box>
+
+  <popup-box id="gestureSetLeavePopup" type="confirm">
+    <span slot="title" data-i18n="gestureSetLeaveTitle"></span>
+    <p slot="content" data-i18n="gestureSetLeaveConfirm"></p>
+  </popup-box>
+
+  <popup-box id="gestureSetDanglingPopup" type="alert">
+    <span slot="title" data-i18n="gestureSetDanglingTitle"></span>
+    <p slot="content" data-i18n="gestureSetDanglingMessage"></p>
+  </popup-box>
 </body>
 </html>

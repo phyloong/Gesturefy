@@ -1,5 +1,7 @@
 import { ContentLoaded, Config } from "/views/options/main.mjs";
 
+import { initGestureSets, renderGestureSetBar } from "/views/options/gesture-sets.mjs";
+
 import MouseGestureController from "/core/controllers/mouse-gesture-controller.mjs";
 
 import Gesture from "/core/models/gesture.mjs";
@@ -39,19 +41,13 @@ function main (values) {
         gestureSearchInput.oninput = onSearchInput;
         gestureSearchInput.placeholder = browser.i18n.getMessage('gestureSearchPlaceholder');
   // create and add all existing gesture items
-  const fragment = document.createDocumentFragment();
-  for (let gestureJSON of Config.get("Gestures")) {
-    const gesture = new Gesture(gestureJSON);
-    const gestureListItem = createGestureListItem(gesture);
-    // use the reference to the gestureItem as the Map key to the gesture object
-    Gestures.set(gestureListItem, gesture);
-    fragment.prepend(gestureListItem);
-  }
   const gestureList = document.getElementById("gestureContainer");
-        gestureList.appendChild(fragment);
         gestureList.dataset.noResultsHint = browser.i18n.getMessage('gestureHintNoSearchResults');
+  renderGestureList();
   // add mouse gesture controller event listeners
   mouseGestureControllerSetup();
+  // add the gesture set bar, panel and popups
+  initGestureSets({ renderGestureList });
 }
 
 
@@ -378,9 +374,7 @@ function onItemClick (event) {
     Gestures.delete(this);
     removeGestureListItem(this);
     // update config
-    // this works because the config manager calls JSON.stringify which in turn calls the toJSON function of the Gesture class
-    // source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
-    Config.set("Gestures", Array.from(Gestures.values()));
+    writeGestures(Array.from(Gestures.values()));
   }
   else {
     // open gesture popup and hold reference to current item
@@ -504,9 +498,7 @@ function onGesturePopupFormSubmit (event) {
     // store new gesture
     Gestures.set(gestureListItem, newGesture);
     // update config
-    // this works because the config manager calls JSON.stringify which in turn calls the toJSON function of the Gesture class
-    // source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
-    Config.set("Gestures", Array.from(Gestures.values()));
+    writeGestures(Array.from(Gestures.values()));
     // append html item
     addGestureListItem(gestureListItem);
   }
@@ -517,9 +509,7 @@ function onGesturePopupFormSubmit (event) {
     currentGesture.setCommand(gesturePopupCommandSelect.command);
     currentGesture.setLabel(gesturePopupLabelInput.value);
     // update config
-    // this works because the config manager calls JSON.stringify which in turn calls the toJSON function of the Gesture class
-    // source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
-    Config.set("Gestures", Array.from(Gestures.values()));
+    writeGestures(Array.from(Gestures.values()));
     // update html item
     updateGestureListItem(currentItem, currentGesture);
   }
@@ -733,4 +723,51 @@ function mouseGestureControllerSetup () {
       gesturePopupPatternContainer.title = gesturePopupPatternContainer.dataset.gestureRecordingHint;
     }
   });
+}
+
+
+/**
+ * Writes the given gestures to the config and detaches the gesture set bar from the active set
+ * All gesture writes which change the gesture list have to be routed through this helper
+ * Exception: applying a gesture set and saving the current gestures as a new set write
+ * Gestures and ActiveGestureSetId together, they set the active gesture set id instead of clearing it
+ * Edits through this helper clear the id, so the bar falls back to None
+ **/
+function writeGestures (gestures) {
+  // this works because the config manager calls JSON.stringify which in turn calls the toJSON function of the Gesture class
+  // source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
+  Config.set("Gestures", gestures);
+  Config.set("ActiveGestureSetId", null);
+  renderGestureSetBar();
+}
+
+
+/**
+ * Rebuilds the gesture list from the given gestures and re-applies the current search filter
+ * Defaults to the stored gestures, a preview passes the gestures of the previewed set instead
+ * A preview is rendered read-only, editing it would write the previewed gestures to the config
+ **/
+function renderGestureList (gestures = Config.get("Gestures") ?? [], isReadOnly = false) {
+  const gestureList = document.getElementById("gestureContainer");
+  const gestureAddButtonItem = gestureList.firstElementChild;
+
+  // clear current gesture list items and gesture map
+  for (const gestureListItem of gestureList.querySelectorAll(".gl-item")) gestureListItem.remove();
+  Gestures.clear();
+
+  // build the new gesture list items
+  const fragment = document.createDocumentFragment();
+  for (let gestureJSON of gestures) {
+    const gesture = new Gesture(gestureJSON);
+    const gestureListItem = createGestureListItem(gesture);
+    // use the reference to the gestureItem as the Map key to the gesture object
+    Gestures.set(gestureListItem, gesture);
+    fragment.prepend(gestureListItem);
+  }
+  gestureAddButtonItem.after(fragment);
+
+  gestureList.inert = isReadOnly;
+
+  // keep the list consistent with the search input
+  onSearchInput();
 }

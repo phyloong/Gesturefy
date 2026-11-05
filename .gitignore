@@ -1,0 +1,8 @@
+# add-on package produced by `cd src && zip -r ../extension.zip .`
+/extension.zip
+
+# local agent/tooling directories
+.agents/
+.claude/
+.codebuddy/
+.opencode/

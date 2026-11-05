@@ -299,5 +299,7 @@
       }
     }
   ],
-  "Exclusions": []
+  "Exclusions": [],
+  "GestureSets": [],
+  "ActiveGestureSetId": null
 }
